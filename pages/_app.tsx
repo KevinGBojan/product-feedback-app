@@ -17,7 +17,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Toaster
         toastOptions={{
           style: {
-            background: "#AD1FEA",
+            background: "#3A4374",
             color: "white",
           },
         }}
