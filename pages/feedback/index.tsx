@@ -37,12 +37,8 @@ const validationSchema = Yup.object({
 export default function AddFeedback({}) {
   const { user } = useContext(UserContext);
 
-  const onSubmit = async (
-    values: FormikValues,
-    helpers: FormikHelpers<FormikValues>
-  ) => {
+  const onSubmit = async (values: FormikValues) => {
     const slug = values.title.replace(/\s/g, "-").toLowerCase();
-    helpers.setSubmitting(true);
     await setDoc(doc(db, "users", `${user?.uid}`, "suggestions", `${slug}`), {
       uid: user?.uid,
       title: values.title,
@@ -54,10 +50,7 @@ export default function AddFeedback({}) {
       createdAt: Timestamp.fromDate(new Date()),
       updatedAt: Timestamp.fromDate(new Date()),
       comments: [],
-    })
-      .then(() => helpers.setSubmitting(false))
-      .then(() => helpers.resetForm())
-      .catch((error) => console.log(error));
+    });
   };
 
   const categoryOptions = [
@@ -78,7 +71,12 @@ export default function AddFeedback({}) {
         </div>
       </Link>
       <Formik
-        onSubmit={(values, helpers) => onSubmit(values, helpers)}
+        onSubmit={(values, actions) => {
+          actions.setSubmitting(true);
+          onSubmit(values)
+            .then(() => actions.setSubmitting(false))
+            .then(() => actions.resetForm());
+        }}
         validationSchema={validationSchema}
         initialValues={initialValues}
         validateOnChange={false}

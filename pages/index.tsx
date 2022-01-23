@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useGetSuggestions } from "../lib/Hooks/useGetSuggestions";
 import { RiLightbulbFlashFill } from "react-icons/ri";
@@ -14,9 +14,8 @@ const Home = () => {
   const { user, username } = useContext(UserContext);
   const [signOut, setSignOut] = useState(false);
   const [dropdown, setDropdown] = useState(false);
-  const [currentFilter, setCurrentFilter] = useState("");
+  const [currentFilter, setCurrentFilter] = useState("All");
   const categories = ["All", "UI", "UX", "Enhancement", "Bug", "Feature"];
-
   const { suggestions, loading, error } = useGetSuggestions();
 
   return (
@@ -58,7 +57,7 @@ const Home = () => {
           {categories.map((category) => (
             <div className="px-2 py-2">
               <button
-                className={`px-5 py-2 ml-2 bg-pallet-500 text-pallet-200 text-md rounded-md ${
+                className={`capitalize px-5 py-2 ml-2 bg-pallet-500 text-pallet-200 text-md rounded-md ${
                   currentFilter == category && "bg-pallet-300 text-pallet-500"
                 }`}
                 onClick={() => {
@@ -94,7 +93,8 @@ const Home = () => {
             </button>
           </Link>
         </div>
-        {suggestions && suggestions.length > 0 ? (
+
+        {suggestions ? (
           <div>
             {suggestions.map((suggestion) => (
               <Suggestion

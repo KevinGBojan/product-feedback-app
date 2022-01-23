@@ -1,26 +1,28 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { db } from "../firebase";
 import { collectionGroup, query, orderBy, limit } from "firebase/firestore";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 
-export const useGetSuggestions = (currentFilter: string) => {
-  // orderBy comments.length or upvotes
-  // filter for tags
-
-  const q = query(collectionGroup(db, "suggestions"));
-  const [suggestions, loading, error] = useCollectionData(q);
+export const useGetSuggestions = () => {
+  // const [filteredSuggestions, setFilteredSuggestions] = useState(suggestions);
 
   // useEffect(() => {
+  //   if (currentFilter === "All") {
+  //     setFilteredSuggestions(suggestions);
+  //   } else {
+  //     setFilteredSuggestions(
+  //       suggestions?.filter(
+  //         (suggestion) => suggestion.category === currentFilter.toLowerCase()
+  //       )
+  //     );
+  //   }
+  // }, [currentFilter]);
 
-  // }, [currentFilter])
+  // console.log(loading, suggestions);
 
-  // if (currentFilter == "All") {
-  //   suggestions = suggestionsObject;
-  // } else {
-  //   const suggestions = suggestionsObject?.filter(
-  //     (suggestion) => suggestion.category == currentFilter
-  //   );
-  // }
+  const [suggestions, loading, error] = useCollectionData(
+    collectionGroup(db, "suggestions")
+  );
 
   return { suggestions, loading, error };
 };
