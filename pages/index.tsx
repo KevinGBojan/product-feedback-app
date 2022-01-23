@@ -2,33 +2,114 @@ import { useState } from "react";
 import Image from "next/image";
 import { useGetSuggestions } from "../lib/Hooks/useGetSuggestions";
 import { RiLightbulbFlashFill } from "react-icons/ri";
+import { useContext } from "react";
+import { UserContext } from "../lib/context";
+import { useGetUserInfo } from "../lib/Hooks/useGetUserInfo";
+import { SignOut } from "./enter";
+import { FaSignOutAlt } from "react-icons/fa";
+import Suggestion from "../components/Suggestion";
 import Link from "next/link";
-
 const Home = () => {
+  const { userInfo } = useGetUserInfo();
+  const { user, username } = useContext(UserContext);
+  const [signOut, setSignOut] = useState(false);
   const [dropdown, setDropdown] = useState(false);
-  const [filter, setFilter] = useState();
+  const [currentFilter, setCurrentFilter] = useState("");
+  const categories = ["All", "UI", "UX", "Enhancement", "Bug", "Feature"];
+
   const { suggestions, loading, error } = useGetSuggestions();
 
   return (
     <div className="w-9/12 flex mx-auto pt-20">
-      <div className="w-1/4 bg-pallet-100 mr-12">plz</div>
-      <div className="w-3/4">
-        <div className="bg-pallet-600 text-white w-full px-8 py-5 rounded-lg flex items-center">
-          <RiLightbulbFlashFill size="24" />
-          <div className="flex text-lg tracking-wider font-bold ml-4 mr-6">
-            <span className="mr-2">{suggestions ? suggestions.length : 0}</span>
-            <span>Suggestions</span>
-          </div>
-          <div className="text-lg flex items-center">
-            <span className="mr-2 text-pallet-400">Sort by : </span>
-
-            <div className="relative"></div>
-
-            <div className="absolute"></div>
+      <div className="w-1/4 mr-12">
+        <div className="h-[200px] bg-gradient-to-r from-[#28A7ED] via-[#A337F6] to-[#E84D70] rounded-xl px-8 py-6 text-white">
+          <div className="flex flex-col">
+            {userInfo && (
+              <div
+                className="flex relative cursor-pointer"
+                onClick={() => setSignOut(!signOut)}
+              >
+                <Image
+                  src={userInfo.avatarURL}
+                  height="40"
+                  width="40"
+                  className="rounded-full"
+                />
+                <div className="flex flex-col ml-4 text-xs">
+                  <span className="text-sm">{userInfo.displayName}</span>
+                  <span className="">@{userInfo.username}</span>
+                </div>
+              </div>
+            )}
+            <h2 className="mt-14 mb-2">Frontend Mentor</h2>
+            <span className="text-white/75">Feedback Board</span>
+            {signOut && (
+              <div
+                className="absolute flex items-center mt-12 bg-white w-[150px] text-[#D73737] hover:text-pallet-100 px-3 text-sm font-light py-2 rounded-lg cursor-pointer"
+                onClick={SignOut}
+              >
+                <FaSignOutAlt size="16" className="mr-2" />
+                <span>Sign Out</span>
+              </div>
+            )}
           </div>
         </div>
+        <div className="bg-white h-[200px] mt-10 rounded-xl flex flex-wrap justify-left items-center">
+          {categories.map((category) => (
+            <div className="px-2 py-2">
+              <button
+                className={`px-5 py-2 ml-2 bg-pallet-500 text-pallet-200 text-md rounded-md ${
+                  currentFilter == category && "bg-pallet-300 text-pallet-500"
+                }`}
+                onClick={() => {
+                  // add or remove category from currentFilter, depending on whether it's in it already
+                  setCurrentFilter(category);
+                }}
+              >
+                {category}
+              </button>
+            </div>
+          ))}
+        </div>
+        <div></div>
+      </div>
+      <div className="w-3/4">
+        <div className="bg-pallet-600 text-white w-full px-12 py-5 rounded-lg flex items-center justify-between">
+          <div className="flex">
+            <RiLightbulbFlashFill size="24" />
+            <div className="flex text-lg tracking-wider font-bold ml-4">
+              <span className="mr-2">
+                {suggestions ? suggestions.length : 0}
+              </span>
+              <span>Suggestions</span>
+            </div>
+          </div>
+
+          <div className="text-lg flex items-center">
+            <span className="mr-2 text-pallet-400">Sort by : </span>
+          </div>
+          <Link href="/feedback">
+            <button className="bg-pallet-100 font-bold text-md text-pallet-400 px-5 py-3 rounded-lg">
+              + Add Feedback
+            </button>
+          </Link>
+        </div>
         {suggestions && suggestions.length > 0 ? (
-          <div>plz</div>
+          <div>
+            {suggestions.map((suggestion) => (
+              <Suggestion
+                key={suggestion.slug}
+                slug={suggestion.slug}
+                uid={suggestion.uid}
+                category={suggestion.category}
+                title={suggestion.title}
+                commentsLength={suggestion.comments.length}
+                description={suggestion.description}
+                createdAt={suggestion.createdAt}
+                upvotes={suggestion.upvotes}
+              />
+            ))}
+          </div>
         ) : (
           <NoFeedbackYet />
         )}

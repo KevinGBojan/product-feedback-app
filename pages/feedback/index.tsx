@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { UserContext } from "../../lib/context";
 import { db } from "../../lib/firebase";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, Timestamp } from "firebase/firestore";
 import { IoIosArrowBack, IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import Link from "next/link";
 import Image from "next/image";
@@ -44,12 +44,16 @@ export default function AddFeedback({}) {
     const slug = values.title.replace(/\s/g, "-").toLowerCase();
     helpers.setSubmitting(true);
     await setDoc(doc(db, "users", `${user?.uid}`, "suggestions", `${slug}`), {
+      uid: user?.uid,
       title: values.title,
       description: values.description,
       category: values.category,
-      uid: slug,
+      slug: slug,
       upvotes: 0,
       status: "suggestion",
+      createdAt: Timestamp.fromDate(new Date()),
+      updatedAt: Timestamp.fromDate(new Date()),
+      comments: [],
     })
       .then(() => helpers.setSubmitting(false))
       .then(() => helpers.resetForm())
@@ -78,6 +82,7 @@ export default function AddFeedback({}) {
         validationSchema={validationSchema}
         initialValues={initialValues}
         validateOnChange={false}
+        validateOnBlur={false}
       >
         {(formik) => (
           <Form className="bg-white mt-10 py-16 px-8 rounded-lg">
