@@ -1,8 +1,28 @@
-import '../styles/globals.css'
-import type { AppProps } from 'next/app'
+import type { AppProps } from "next/app";
+import "../styles/globals.css";
+
+// Notifications
+import { Toaster } from "react-hot-toast";
+
+// Auth
+import { UserContext } from "../lib/context";
+import { useGetUser } from "../lib/Hooks/useGetUser";
 
 function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
-}
+  const user = useGetUser();
 
-export default MyApp
+  return (
+    <UserContext.Provider value={user}>
+      <Component {...pageProps} />
+      <Toaster
+        toastOptions={{
+          style: {
+            background: "#AD1FEA",
+            color: "white",
+          },
+        }}
+      />
+    </UserContext.Provider>
+  );
+}
+export default MyApp;
