@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext, useCallback } from "react";
+import { useRouter } from "next/router";
 import { db, auth, provider } from "../lib/firebase";
 import { signInWithPopup, signOut } from "firebase/auth";
 import { doc, getDoc, writeBatch } from "firebase/firestore";
@@ -9,6 +10,15 @@ import Image from "next/image";
 
 const Enter = () => {
   const { user, username } = useContext(UserContext);
+
+  // Check to see if username is there and if so redirect to homepage
+
+  const router = useRouter();
+  useEffect(() => {
+    if (username) {
+      router.push("/");
+    }
+  }, [username]);
 
   // If user is singed out, show the Sign In Button
   // If user is signed in but doesn't have a username, show the form

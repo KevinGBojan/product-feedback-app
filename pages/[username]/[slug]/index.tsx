@@ -26,7 +26,7 @@ import toast from "react-hot-toast";
 import { v4 as uuidv4 } from "uuid";
 
 export default function CommentsSection({}) {
-  const { user } = useContext(UserContext); // get current user data
+  const { user, username } = useContext(UserContext); // get current user data
   const { query } = useRouter(); // fetch username and suggestion slug from URL
   const { userId } = useGetUserWithUsername(query.username); // get user UID with username
   const { suggestion } = useGetUserSuggestion(userId?.uid, query.slug); // fetch suggestion
@@ -59,13 +59,21 @@ export default function CommentsSection({}) {
   };
 
   return (
-    <main className="mt-10 w-1/3 mx-auto flex flex-col justify-center items-left">
-      <Link href="/">
-        <div className="text-pallet-700 font-bold flex cursor-pointer">
-          <IoIosArrowBack size="24" className="text-pallet-200 mr-2" />
-          <span>Go Back</span>
-        </div>
-      </Link>
+    <main className="mt-10 w-1/2 mx-auto flex flex-col justify-center items-left">
+      <div className="flex justify-between">
+        <Link href="/">
+          <div className="text-pallet-700 font-bold flex cursor-pointer">
+            <IoIosArrowBack size="24" className="text-pallet-200 mr-2" />
+            <span>Go Back</span>
+          </div>
+        </Link>
+        {username == query.username && (
+          <Link href={`/${query.username}/${query.slug}/edit`}>
+            <div className="cursor-pointer">Edit Feedback</div>
+          </Link>
+        )}
+      </div>
+
       <Suggestion
         slug={suggestion?.slug}
         uid={suggestion?.uid}
