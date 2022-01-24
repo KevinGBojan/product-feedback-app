@@ -3,7 +3,14 @@ import Comment from "./Comment";
 
 // Firebase
 import { db } from "../lib/firebase";
-import { collection, addDoc, Timestamp } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  Timestamp,
+  updateDoc,
+  doc,
+  increment,
+} from "firebase/firestore";
 import { useGetReplies } from "../lib/Hooks/useGetReplies";
 
 // Auth
@@ -32,9 +39,10 @@ const Comments = (props: commentsType) => {
   const [formValue, setFormValue] = useState("");
   const { replies } = useGetReplies(props.uid, props.slug, props.commentUid); // fetch replies
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    addDoc(
+
+    await addDoc(
       collection(
         db,
         "users",
@@ -54,6 +62,13 @@ const Comments = (props: commentsType) => {
       .then(() => setFormValue(""))
       .then(() => setOpenForm(false))
       .then(() => toast.success("Comment added successfully"));
+
+    await updateDoc(
+      doc(db, "users", `${props.uid}`, "suggestions", `${props.slug}`),
+      {
+        commentCount: increment(1),
+      }
+    );
   };
 
   return (

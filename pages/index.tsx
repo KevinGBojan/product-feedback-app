@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useGetSuggestions } from "../lib/Hooks/useGetSuggestions";
 import { RiLightbulbFlashFill } from "react-icons/ri";
@@ -9,6 +9,7 @@ import { SignOut } from "./enter";
 
 import Suggestion from "../components/Suggestion";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 // Icons
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
@@ -38,11 +39,24 @@ const Home = () => {
     "Least Comments",
   ];
 
-  const { suggestions, loading, error } = useGetSuggestions(categoryFilter);
+  const { suggestions } = useGetSuggestions(categoryFilter, orderFilter);
+
+  // useEffect(() => {
+  //   console.log(suggestions);
+  // }, [suggestions]);
 
   const SignOutModal = () => {
     SignOut();
     setSignOut(false);
+  };
+
+  const container = {
+    hidden: {},
+    show: {
+      transition: {
+        staggerChildren: 0.5,
+      },
+    },
   };
 
   return (
@@ -193,9 +207,14 @@ const Home = () => {
             </button>
           </Link>
         </div>
-        <div className="pb-40">
+        <div>
           {suggestions ? (
-            <div>
+            <motion.div
+              className="pb-40"
+              variants={container}
+              initial="hidden"
+              animate="show"
+            >
               {suggestions.reverse().map((suggestion) => (
                 <Suggestion
                   key={suggestion.slug}
@@ -208,7 +227,7 @@ const Home = () => {
                   upvotes={suggestion.upvotes}
                 />
               ))}
-            </div>
+            </motion.div>
           ) : (
             <NoFeedbackYet />
           )}

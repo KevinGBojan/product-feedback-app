@@ -55,7 +55,7 @@ const FeedbackForm = (props: FeedbackType) => {
         status: values.status,
         createdAt: Timestamp.fromDate(new Date()),
         updatedAt: Timestamp.fromDate(new Date()),
-        comments: [],
+        commentCount: 0,
       },
       { merge: true }
     );

@@ -1,42 +1,55 @@
 import { useEffect, useState } from "react";
 import { db } from "../firebase";
-import { collectionGroup, query, orderBy, limit } from "firebase/firestore";
+import {
+  getDocs,
+  collectionGroup,
+  query,
+  orderBy,
+  limit,
+  getDoc,
+} from "firebase/firestore";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 
-export const useGetSuggestions = (categoryFilter: string) => {
-  // const [filteredSuggestions, setFilteredSuggestions] = useState(suggestions);
+export const useGetSuggestions = (
+  categoryFilter: string,
+  orderFilter: string
+) => {
+  const [order, setOrder] = useState(orderBy("upvotes"));
 
   // useEffect(() => {
-  //   if (currentFilter === "All") {
-  //     setFilteredSuggestions(suggestions);
-  //   } else {
-  //     setFilteredSuggestions(
-  //       suggestions?.filter(
-  //         (suggestion) => suggestion.category === currentFilter.toLowerCase()
-  //       )
-  //     );
+  //   switch (orderFilter) {
+  //     case "Most Upvotes":
+  //       setOrder(orderBy("upvotes", "desc"));
+  //     case "Least Upvotes":
+  //       setOrder(orderBy("upvotes", "asc"));
+  //     case "Most Comments":
+  //       setOrder(orderBy("commentCount", "desc"));
+  //     case "Least Comments":
+  //       setOrder(orderBy("commentCount", "asc"));
   //   }
-  // }, [currentFilter]);
+  // }, [orderFilter]);
 
-  // console.log(loading, suggestions);
+  const collectionRef = collectionGroup(db, "suggestions");
+  const q = query(collectionRef, order);
 
-  // const filterSuggestions = (arrayOfSuggestions) => {
-  //   const filter = categoryFilter.toLowerCase();
-  //   return arrayOfInvoices
-  //     arrayOfSuggestions.filter(
-  //         (suggestion) =>
-  //           (suggestion.category === "ui" && filter) ||
-  //           (suggestion.category === "pending" && filter) ||
-  //           (suggestion.category === "paid" && filter)
-  //       )
-  //     : null;
-  // };
+  // const suggestions = getDocs(q).then((doc) => console.log(doc));
 
-  // const filteredInvoices = filterInvoices(filters, invoices);
+  const [suggestionsObj] = useCollectionData(q);
 
-  const [suggestions, loading, error] = useCollectionData(
-    collectionGroup(db, "suggestions")
-  );
+  const [suggestions, setSuggestions] = useState(suggestionsObj);
 
-  return { suggestions, loading, error };
+  useEffect(() => {
+    if (categoryFilter === "All") {
+      console.log(suggestionsObj);
+      setSuggestions(suggestionsObj);
+    } else {
+      setSuggestions(
+        suggestionsObj?.filter(
+          (suggestion) => suggestion.category === categoryFilter.toLowerCase()
+        )
+      );
+    }
+  }, [categoryFilter, suggestionsObj]);
+
+  return { suggestions };
 };

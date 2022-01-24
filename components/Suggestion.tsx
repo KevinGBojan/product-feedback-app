@@ -5,7 +5,14 @@ import Link from "next/link";
 // Firebase
 import { useGetUserInfo } from "../lib/Hooks/useGetUserInfo";
 import { db } from "../lib/firebase";
-import { doc, setDoc, getDoc, updateDoc, increment } from "firebase/firestore";
+import {
+  doc,
+  setDoc,
+  getDoc,
+  updateDoc,
+  increment,
+  Timestamp,
+} from "firebase/firestore";
 import { useGetComments } from "../lib/Hooks/useGetComments";
 
 // Auth
@@ -18,6 +25,9 @@ import { FaComment } from "react-icons/fa";
 // Notifications
 import toast from "react-hot-toast";
 
+// Animation
+import { motion } from "framer-motion";
+
 // This component renders out the suggestion card that shows up on the homepage
 // and in the comments section. It takes a uid of the user that made the suggestion
 // and uses it to fetch the user data. It also takes the slug so it can be injected
@@ -27,7 +37,7 @@ import toast from "react-hot-toast";
 interface suggestionType {
   slug: string;
   uid: string;
-  createdAt: any;
+  createdAt: Timestamp;
   title: string;
   description: string;
   upvotes: number;
@@ -71,8 +81,22 @@ const Suggestion = (props: suggestionType) => {
     }
   };
 
+  const childrenVariants = {
+    hidden: {
+      opacity: 0,
+      y: 100,
+    },
+    show: {
+      opacity: 1,
+      y: 0,
+    },
+  };
+
   return (
-    <div className="bg-white px-8 py-8 flex mt-8 rounded-lg">
+    <motion.div
+      className="bg-white px-8 py-8 flex mt-8 rounded-lg"
+      variants={childrenVariants}
+    >
       <div
         className="bg-pallet-400 h-[50px] flex flex-col items-center px-2 rounded-xl mr-8 cursor-pointer"
         onClick={handleUpvote}
@@ -124,7 +148,7 @@ const Suggestion = (props: suggestionType) => {
           </div>
         </div>
       </Link>
-    </div>
+    </motion.div>
   );
 };
 

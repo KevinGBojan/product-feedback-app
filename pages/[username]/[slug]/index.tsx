@@ -91,18 +91,24 @@ export default function CommentsSection({}) {
             value={formValue}
             onChange={(e) => setFormValue(e.target.value)}
           />
-          <div className="flex justify-between mt-6 mb-2">
-            <span className="font-light text-pallet-700">
-              {250 - formValue.length} Characters Left
-            </span>
-            <button
-              type="submit"
-              disabled={formValue.length < 4 || formValue.length > 250}
-              className="text-pallet-500 bg-pallet-100 text-xs font-bold px-8 py-4 rounded-lg"
-            >
-              Post Comment
-            </button>
-          </div>
+          {username ? (
+            <>
+              <div className="flex justify-between mt-6 mb-2">
+                <span className="font-light text-pallet-700">
+                  {250 - formValue.length} Characters Left
+                </span>
+                <button
+                  type="submit"
+                  disabled={formValue.length < 4 || formValue.length > 250}
+                  className="text-pallet-500 bg-pallet-100 text-xs font-bold px-8 py-4 rounded-lg"
+                >
+                  Post Comment
+                </button>
+              </div>
+            </>
+          ) : (
+            <></>
+          )}
         </form>
       </div>
       <div className="bg-white mt-8 px-8 rounded-lg pb-20 pt-8 mb-40">
