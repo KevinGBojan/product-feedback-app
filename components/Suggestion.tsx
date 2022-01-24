@@ -26,7 +26,7 @@ const Suggestion = (props: suggestionType) => {
 
   const { userInfo } = useGetUserInfo(props.uid);
 
-  let date = props?.createdAt.toDate();
+  let date = props.createdAt?.toDate();
 
   const handleUpvote = async () => {
     const upvoteRef = doc(

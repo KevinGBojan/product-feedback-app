@@ -55,7 +55,7 @@ const Home = () => {
         </div>
         <div className="bg-white h-[200px] mt-10 rounded-xl flex flex-wrap justify-left items-center">
           {categories.map((category) => (
-            <div className="px-2 py-2">
+            <div className="px-2 py-2" key={category}>
               <button
                 className={`capitalize px-5 py-2 ml-2 bg-pallet-500 text-pallet-200 text-md rounded-md ${
                   currentFilter == category && "bg-pallet-300 text-pallet-500"
