@@ -17,7 +17,7 @@ import { AiOutlineCheck } from "react-icons/ai";
 import { FaSignOutAlt } from "react-icons/fa";
 
 const Home = () => {
-  // TODO: Animations
+  // TODO: Animations for exit
   // TODO: Loading Spinner
   // TODO: Filtering
 
@@ -50,7 +50,7 @@ const Home = () => {
     setSignOut(false);
   };
 
-  const container = {
+  const containerVariants = {
     hidden: {},
     show: {
       transition: {
@@ -208,10 +208,10 @@ const Home = () => {
           </Link>
         </div>
         <div>
-          {suggestions ? (
+          {suggestions && suggestions.length > 0 ? (
             <motion.div
               className="pb-40"
-              variants={container}
+              variants={containerVariants}
               initial="hidden"
               animate="show"
             >
