@@ -14,14 +14,16 @@ const Home = () => {
   const { user, username } = useContext(UserContext);
   const [signOut, setSignOut] = useState(false);
   const [dropdown, setDropdown] = useState(false);
-  const [currentFilter, setCurrentFilter] = useState("All");
+  const [categoryFilter, setCategoryFilter] = useState("All");
   const categories = ["All", "UI", "UX", "Enhancement", "Bug", "Feature"];
   const { suggestions, loading, error } = useGetSuggestions();
+
+  console.log(categoryFilter);
 
   return (
     <div className="w-9/12 flex mx-auto pt-20">
       <div className="w-1/4 mr-12">
-        <div className="h-[200px] bg-gradient-to-r from-[#28A7ED] via-[#A337F6] to-[#E84D70] rounded-xl px-8 py-6 text-white">
+        <div className="h-[200px] bg-gradient-to-tr from-[#28A7ED] via-[#A337F6] to-[#E84D70] rounded-xl px-8 py-6 text-white">
           <div className="flex flex-col">
             {userInfo && (
               <div
@@ -58,11 +60,11 @@ const Home = () => {
             <div className="px-2 py-2" key={category}>
               <button
                 className={`capitalize px-5 py-2 ml-2 bg-pallet-500 text-pallet-200 text-md rounded-md ${
-                  currentFilter == category && "bg-pallet-300 text-pallet-500"
+                  categoryFilter == category && "bg-pallet-300 text-pallet-500"
                 }`}
                 onClick={() => {
                   // add or remove category from currentFilter, depending on whether it's in it already
-                  setCurrentFilter(category);
+                  setCategoryFilter(category);
                 }}
               >
                 {category}
@@ -103,7 +105,6 @@ const Home = () => {
                 uid={suggestion.uid}
                 category={suggestion.category}
                 title={suggestion.title}
-                commentsLength={suggestion.comments.length}
                 description={suggestion.description}
                 createdAt={suggestion.createdAt}
                 upvotes={suggestion.upvotes}

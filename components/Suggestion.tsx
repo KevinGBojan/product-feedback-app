@@ -1,14 +1,28 @@
-import React from "react";
-import { useGetUserInfo } from "../lib/Hooks/useGetUserInfo";
-import { IoIosArrowUp } from "react-icons/io";
-import { FaComment } from "react-icons/fa";
+import { useContext } from "react";
 import Image from "next/image";
+import Link from "next/link";
+
+// Firebase
+import { useGetUserInfo } from "../lib/Hooks/useGetUserInfo";
 import { db } from "../lib/firebase";
 import { doc, setDoc, getDoc, updateDoc, increment } from "firebase/firestore";
-import { useContext } from "react";
+import { useGetComments } from "../lib/Hooks/useGetComments";
+
+// Auth
 import { UserContext } from "../lib/context";
+
+// Icons
+import { IoIosArrowUp } from "react-icons/io";
+import { FaComment } from "react-icons/fa";
+
+// Notifications
 import toast from "react-hot-toast";
-import Link from "next/link";
+
+// This component renders out the suggestion card that shows up on the homepage
+// and in the comments section. It takes a uid of the user that made the suggestion
+// and uses it to fetch the user data. It also takes the slug so it can be injected
+// in the URL and also takes suggestion details i.e., title, description, timestamp,
+// etc
 
 interface suggestionType {
   slug: string;
@@ -17,16 +31,19 @@ interface suggestionType {
   title: string;
   description: string;
   upvotes: number;
-  commentsLength: number;
   category: string;
 }
 
 const Suggestion = (props: suggestionType) => {
-  const { user } = useContext(UserContext);
-
-  const { userInfo } = useGetUserInfo(props.uid);
+  const { user } = useContext(UserContext); // fetch user who is logged in
+  const { userInfo } = useGetUserInfo(props.uid); // fetch user who made the suggestion
+  const { comments } = useGetComments(props.uid, props.slug); // query comments of the suggestion to show comment count
 
   let date = props.createdAt?.toDate();
+
+  // function checks if user upvoted the suggestion already and returns an error message if that is the case.
+  // otherwise, it increments the count on the suggestion doc and also adds a doc with user uid in the upvotes
+  // collection.
 
   const handleUpvote = async () => {
     const upvoteRef = doc(
@@ -101,7 +118,7 @@ const Suggestion = (props: suggestionType) => {
             <div className="flex">
               <FaComment size="24" className="text-[#CDD2EE] mr-3" />
               <span className="text-pallet-600 font-bold">
-                {props.commentsLength}
+                {comments?.length}
               </span>
             </div>
           </div>

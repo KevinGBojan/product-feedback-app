@@ -1,39 +1,61 @@
+import { useState, useContext } from "react";
+
+// Components
+import Suggestion from "../../../components/Suggestion";
+import Comments from "../../../components/Comments";
+
+// Firebase
 import { useGetUserSuggestion } from "../../../lib/Hooks/useGetUserSuggestion";
 import { useGetUserWithUsername } from "../../../lib/Hooks/useGetUserWithUsername";
+import { useGetComments } from "../../../lib/Hooks/useGetComments";
+import { db } from "../../../lib/firebase";
+import { collection, addDoc, Timestamp } from "firebase/firestore";
+
+// Auth
+import { UserContext } from "../../../lib/context";
+
+// Routing
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { IoIosArrowBack } from "react-icons/io";
-import Suggestion from "../../../components/Suggestion";
-import { db } from "../../../lib/firebase";
-import { doc, updateDoc, Timestamp } from "firebase/firestore";
-import React, { useState, useContext } from "react";
-import { UserContext } from "../../../lib/context";
-import Comment from "../../../components/Comment";
 
-export default function Comments({}) {
+// Icons
+import { IoIosArrowBack } from "react-icons/io";
+
+// Other
+import toast from "react-hot-toast";
+import { v4 as uuidv4 } from "uuid";
+
+export default function CommentsSection({}) {
   const { user } = useContext(UserContext); // get current user data
   const { query } = useRouter(); // fetch username and suggestion slug from URL
   const { userId } = useGetUserWithUsername(query.username); // get user UID with username
   const { suggestion } = useGetUserSuggestion(userId?.uid, query.slug); // fetch suggestion
+  const { comments } = useGetComments(userId?.uid, query.slug); // query comments suggestion
 
   const [formValue, setFormValue] = useState("");
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    updateDoc(
-      doc(db, "users", `${userId?.uid}`, "suggestions", `${query.slug}`),
+    const randomId = uuidv4();
+
+    addDoc(
+      collection(
+        db,
+        "users",
+        `${userId?.uid}`,
+        "suggestions",
+        `${query.slug}`,
+        "comments"
+      ),
       {
-        comments: [
-          ...suggestion?.comments,
-          {
-            uid: user?.uid,
-            comment: formValue,
-            replies: {},
-            createdAt: Timestamp.fromDate(new Date()),
-          },
-        ],
+        commentUid: randomId,
+        uid: user?.uid,
+        comment: formValue,
+        createdAt: Timestamp.fromDate(new Date()),
       }
-    ).then(() => setFormValue(""));
+    )
+      .then(() => setFormValue(""))
+      .then(() => toast.success("Comment added successfully"));
   };
 
   return (
@@ -49,7 +71,6 @@ export default function Comments({}) {
         uid={suggestion?.uid}
         category={suggestion?.category}
         title={suggestion?.title}
-        commentsLength={suggestion?.comments.length}
         description={suggestion?.description}
         createdAt={suggestion?.createdAt}
         upvotes={suggestion?.upvotes}
@@ -78,14 +99,15 @@ export default function Comments({}) {
       </div>
       <div className="bg-white mt-8 px-8 rounded-lg pb-20 pt-8 mb-40">
         <span className="text-pallet-600 font-bold text-lg">
-          {suggestion?.comments.length} Comment(s)
+          {comments?.length} Comment(s)
         </span>
-        {suggestion?.comments.reverse().map((comment: any) => (
-          <Comment
-            key={comment.comment}
+        {comments?.reverse().map((comment) => (
+          <Comments
+            slug={query.slug}
+            key={comment.commentUid}
+            commentUid={comment.commentUid}
             comment={comment.comment}
             createdAt={comment.createdAt}
-            replies={comment.replies}
             uid={comment.uid}
           />
         ))}
