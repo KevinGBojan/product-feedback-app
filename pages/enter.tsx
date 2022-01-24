@@ -174,7 +174,7 @@ function UsernameForm() {
           disabled={!valid}
           className="px-4 py-2 bg-pallet-100 font-bold text-white tracking-wider rounded-lg mt-4"
         >
-          Let's go!
+          Plz
         </button>
       </form>
     </section>
