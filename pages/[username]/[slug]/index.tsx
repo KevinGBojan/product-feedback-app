@@ -9,7 +9,14 @@ import { useGetUserSuggestion } from "../../../lib/Hooks/useGetUserSuggestion";
 import { useGetUserWithUsername } from "../../../lib/Hooks/useGetUserWithUsername";
 import { useGetComments } from "../../../lib/Hooks/useGetComments";
 import { db } from "../../../lib/firebase";
-import { collection, addDoc, Timestamp } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  Timestamp,
+  updateDoc,
+  doc,
+  increment,
+} from "firebase/firestore";
 
 // Auth
 import { UserContext } from "../../../lib/context";
@@ -56,6 +63,13 @@ export default function CommentsSection({}) {
     )
       .then(() => setFormValue(""))
       .then(() => toast.success("Comment added successfully"));
+
+    updateDoc(
+      doc(db, "user", `${userId?.uid}`, "suggestions", `${query.slug}`),
+      {
+        commentCount: increment(1),
+      }
+    );
   };
 
   return (
