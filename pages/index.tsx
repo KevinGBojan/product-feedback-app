@@ -13,15 +13,19 @@ const Home = () => {
   const { userInfo } = useGetUserInfo();
   const { user, username } = useContext(UserContext);
   const [signOut, setSignOut] = useState(false);
-  const [dropdown, setDropdown] = useState(false);
+
+  // Filtering with categories
   const [categoryFilter, setCategoryFilter] = useState("All");
   const categories = ["All", "UI", "UX", "Enhancement", "Bug", "Feature"];
-  const { suggestions, loading, error } = useGetSuggestions();
 
-  console.log(categoryFilter);
+  // Filtering with orderBy comments and votes
+  const [dropdown, setDropdown] = useState(false);
+  const [orderFilter, setOrderFilter] = useState("Most Upvotes");
+
+  const { suggestions, loading, error } = useGetSuggestions(categoryFilter);
 
   return (
-    <div className="w-9/12 flex mx-auto pt-20">
+    <div className="w-3/5 flex mx-auto pt-20">
       <div className="w-1/4 mr-12">
         <div className="h-[200px] bg-gradient-to-tr from-[#28A7ED] via-[#A337F6] to-[#E84D70] rounded-xl px-8 py-6 text-white">
           <div className="flex flex-col">
@@ -75,7 +79,7 @@ const Home = () => {
         <div></div>
       </div>
       <div className="w-3/4">
-        <div className="bg-pallet-600 text-white w-full px-12 py-5 rounded-lg flex items-center justify-between">
+        <div className="bg-pallet-600 text-white w-full px-8 py-3 rounded-lg flex items-center justify-between">
           <div className="flex">
             <RiLightbulbFlashFill size="24" />
             <div className="flex text-lg tracking-wider font-bold ml-4">
@@ -87,7 +91,10 @@ const Home = () => {
           </div>
 
           <div className="text-lg flex items-center">
-            <span className="mr-2 text-pallet-400">Sort by : </span>
+            <span className="mr-2 text-pallet-400 text-sm relative">
+              Sort by : <span className="font-bold">{orderFilter}</span>
+            </span>
+            {dropdown && <div className="absolute"></div>}
           </div>
           <Link href="/feedback">
             <button className="bg-pallet-100 font-bold text-md text-pallet-400 px-5 py-3 rounded-lg">

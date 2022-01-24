@@ -20,10 +20,10 @@ export const useGetSuggestions = (categoryFilter: string) => {
 
   // console.log(loading, suggestions);
 
-  // const filterSuggestions = (arrayOfInvoices) => {
+  // const filterSuggestions = (arrayOfSuggestions) => {
   //   const filter = categoryFilter.toLowerCase();
   //   return arrayOfInvoices
-  //     ? arrayOfInvoices.filter(
+  //     arrayOfSuggestions.filter(
   //         (suggestion) =>
   //           (suggestion.category === "ui" && filter) ||
   //           (suggestion.category === "pending" && filter) ||
