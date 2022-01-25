@@ -43,7 +43,7 @@ const FeedbackForm = (props: FeedbackType) => {
     title: suggestion?.title || "",
     category: suggestion?.category || "",
     description: suggestion?.description || "",
-    status: suggestion?.status || "Suggestion",
+    status: suggestion?.status || "suggestion",
   };
 
   const router = useRouter();

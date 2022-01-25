@@ -43,6 +43,16 @@ const Home = () => {
 
   const { suggestions } = useGetSuggestions(categoryFilter, orderFilter);
 
+  const plannedCount = suggestions?.filter(
+    (suggestion) => suggestion.status == "planned"
+  ).length;
+  const liveCount = suggestions?.filter(
+    (suggestion) => suggestion.status == "live"
+  ).length;
+  const progressCount = suggestions?.filter(
+    (suggestion) => suggestion.status == "inprogress"
+  ).length;
+
   const SignOutModal = () => {
     SignOut();
     setSignOut(false);
@@ -130,21 +140,21 @@ const Home = () => {
                 <div className="h-2 w-2 rounded-full bg-[#F49F85] mr-4"></div>
                 <span className="font-light">Planned</span>
               </div>
-              <span className="font-bold text-pallet-600"> {0}</span>
+              <span className="font-bold text-pallet-600">{plannedCount}</span>
             </div>
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <div className="h-2 w-2 rounded-full bg-pallet-100 mr-4"></div>
                 <span className="font-light">In Progress</span>
               </div>
-              <span className="font-bold text-pallet-600"> {0}</span>
+              <span className="font-bold text-pallet-600">{progressCount}</span>
             </div>
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <div className="h-2 w-2 rounded-full bg-pallet-200 mr-4"></div>
                 <span className="font-light">Live</span>
               </div>
-              <span className="font-bold text-pallet-600"> {0}</span>
+              <span className="font-bold text-pallet-600"> {liveCount}</span>
             </div>
           </div>
         </div>
@@ -233,7 +243,7 @@ const Home = () => {
           ) : (
             <div className="bg-white flex flex-col items-center justify-center py-40 mt-10 rounded-lg">
               <Image
-                src="/../public/assets/suggestions/illustration-empty.svg"
+                src="/../public/illustration-empty.svg"
                 height="136.74"
                 width="129.64"
               />

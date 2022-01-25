@@ -4,13 +4,21 @@ import { useRouter } from "next/router";
 import { useContext } from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import { useGetSuggestionsRoadmap } from "../lib/Hooks/useGetSuggestionsRoadmap";
+import SuggestionCard from "../components/SuggestionCard";
 
 export default function Page({}) {
   const { user } = useContext(UserContext);
   const router = useRouter();
   const { suggestions } = useGetSuggestionsRoadmap();
 
-  console.log(suggestions);
+  const containerVariants = {
+    hidden: {},
+    show: {
+      transition: {
+        staggerChildren: 0.3,
+      },
+    },
+  };
 
   return (
     <main className="w-2/3 mx-auto mt-12">
@@ -35,15 +43,87 @@ export default function Page({}) {
         </button>
       </div>
       <div className="w-full flex mt-12">
-        <div className="w-1/3 flex flex-col">
+        <div className="w-1/3 flex flex-col pr-8">
           {/* {suggestions?.filter((suggestion) => suggestion.status === "p")} */}
-          <h3>Planned</h3>
+          <h3 className="text-pallet-600 font-bold text-md">Planned</h3>
+          <span className="text-pallet-700 font-light text-sm">
+            Ideas prioritized for research
+          </span>
+          {suggestions
+            ?.filter((suggestion) => suggestion.status == "planned")
+            .map((suggestion) => (
+              <motion.div
+                variants={containerVariants}
+                initial="hidden"
+                animate="show"
+              >
+                <SuggestionCard
+                  commentCount={suggestion.commentCount}
+                  key={suggestion.slug}
+                  title={suggestion.title}
+                  description={suggestion.description}
+                  status={suggestion.status}
+                  category={suggestion.category}
+                  upvotes={suggestion.upvotes}
+                  slug={suggestion.slug}
+                  uid={suggestion.uid}
+                />
+              </motion.div>
+            ))}
         </div>
-        <div className="w-1/3 flex flex-col">
-          <h3>Planned</h3>
+        <div className="w-1/3 flex flex-col pr-8">
+          <h3 className="text-pallet-600 font-bold text-md">In-Progress</h3>
+          <span className="text-pallet-700 font-light text-sm">
+            Currently being developed
+          </span>
+          {suggestions
+            ?.filter((suggestion) => suggestion.status == "inprogress")
+            .map((suggestion) => (
+              <motion.div
+                variants={containerVariants}
+                initial="hidden"
+                animate="show"
+              >
+                <SuggestionCard
+                  commentCount={suggestion.commentCount}
+                  key={suggestion.slug}
+                  title={suggestion.title}
+                  description={suggestion.description}
+                  status={suggestion.status}
+                  category={suggestion.category}
+                  upvotes={suggestion.upvotes}
+                  slug={suggestion.slug}
+                  uid={suggestion.uid}
+                />
+              </motion.div>
+            ))}
         </div>
-        <div className="w-1/3 flex flex-col">
-          <h3>Planned</h3>
+        <div className="w-1/3 flex flex-col pr-8">
+          <h3 className="text-pallet-600 font-bold text-md">Live</h3>
+          <span className="text-pallet-700 font-light text-sm">
+            Released features
+          </span>
+          {suggestions
+            ?.filter((suggestion) => suggestion.status == "live")
+            .map((suggestion) => (
+              <motion.div
+                variants={containerVariants}
+                initial="hidden"
+                animate="show"
+              >
+                <SuggestionCard
+                  commentCount={suggestion.commentCount}
+                  key={suggestion.slug}
+                  title={suggestion.title}
+                  description={suggestion.description}
+                  status={suggestion.status}
+                  category={suggestion.category}
+                  upvotes={suggestion.upvotes}
+                  slug={suggestion.slug}
+                  uid={suggestion.uid}
+                />
+              </motion.div>
+            ))}
         </div>
       </div>
     </main>
