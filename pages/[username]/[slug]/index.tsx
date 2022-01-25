@@ -87,7 +87,9 @@ export default function CommentsSection({}) {
         </Link>
         {username == query.username && (
           <Link href={`/${query.username}/${query.slug}/edit`}>
-            <div className="cursor-pointer">Edit Feedback</div>
+            <div className="cursor-pointer bg-pallet-200 text-pallet-500 font-bold text-sm px-5 py-3 rounded-lg">
+              Edit Feedback
+            </div>
           </Link>
         )}
       </div>

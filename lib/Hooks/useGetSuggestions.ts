@@ -14,7 +14,7 @@ export const useGetSuggestions = (
   categoryFilter: string,
   orderFilter: string
 ) => {
-  const [order, setOrder] = useState(orderBy("upvotes", "desc"));
+  // const [order, setOrder] = useState(orderBy("upvotes", "desc"));
 
   // useEffect(() => {
   //   switch (orderFilter) {
@@ -29,8 +29,10 @@ export const useGetSuggestions = (
   //   }
   // }, [orderFilter]);
 
-  const collectionRef = collectionGroup(db, "suggestions");
-  const q = query(collectionRef, order);
+  const q = query(
+    collectionGroup(db, "suggestions"),
+    orderBy("upvotes", "desc")
+  );
 
   const [suggestionsObj] = useCollectionData(q);
 
@@ -38,7 +40,6 @@ export const useGetSuggestions = (
 
   useEffect(() => {
     if (categoryFilter === "All") {
-      console.log(suggestionsObj);
       setSuggestions(suggestionsObj);
     } else {
       setSuggestions(

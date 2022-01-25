@@ -1,6 +1,13 @@
 import React from "react";
 import { db } from "../lib/firebase";
-import { doc, setDoc, Timestamp, deleteDoc } from "firebase/firestore";
+import {
+  doc,
+  setDoc,
+  Timestamp,
+  deleteDoc,
+  getDoc,
+  updateDoc,
+} from "firebase/firestore";
 import { IoIosArrowBack } from "react-icons/io";
 import { useRouter } from "next/router";
 import { useGetUserSuggestion } from "../lib/Hooks/useGetUserSuggestion";
@@ -43,9 +50,26 @@ const FeedbackForm = (props: FeedbackType) => {
 
   const onSubmit = async (values: FormikValues) => {
     const slug = values.title.replace(/\s/g, "-").toLowerCase();
-    await setDoc(
-      doc(db, "users", `${props.uid}`, "suggestions", `${slug}`),
-      {
+
+    const suggestionRef = doc(
+      db,
+      "users",
+      `${props.uid}`,
+      "suggestions",
+      `${slug}`
+    );
+
+    const docSnap = await getDoc(suggestionRef);
+
+    if (docSnap.exists()) {
+      await updateDoc(suggestionRef, {
+        description: values.description,
+        category: values.category,
+        status: values.status,
+        updatedAt: Timestamp.fromDate(new Date()),
+      }).then(() => toast.success("Suggestion updated successfully!"));
+    } else {
+      await setDoc(suggestionRef, {
         uid: props.uid,
         title: values.title,
         description: values.description,
@@ -56,9 +80,8 @@ const FeedbackForm = (props: FeedbackType) => {
         createdAt: Timestamp.fromDate(new Date()),
         updatedAt: Timestamp.fromDate(new Date()),
         commentCount: 0,
-      },
-      { merge: true }
-    );
+      }).then(() => toast.success("Suggestion created successfully!"));
+    }
   };
 
   const onDelete = async () => {
@@ -122,6 +145,7 @@ const FeedbackForm = (props: FeedbackType) => {
                 type="text"
                 name="title"
                 className="w-full bg-pallet-500 outline-none rounded-md py-5 px-4 text-pallet-600"
+                disabled={props.edit}
               />
               <ErrorMessage name="title">
                 {(errorMsg) => (

@@ -10,6 +10,8 @@ export default function Page({}) {
   const router = useRouter();
   const { suggestions } = useGetSuggestionsRoadmap();
 
+  console.log(suggestions);
+
   return (
     <main className="w-2/3 mx-auto mt-12">
       <div className="bg-pallet-600 text-white w-full p-8 rounded-lg flex items-center justify-between">

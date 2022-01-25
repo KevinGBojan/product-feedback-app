@@ -4,7 +4,10 @@ import { useCollectionData } from "react-firebase-hooks/firestore";
 
 export const useGetSuggestionsRoadmap = () => {
   const [suggestions, loading, error] = useCollectionData(
-    query(collectionGroup(db, "suggestions"), where("status", "==", ""))
+    query(
+      collectionGroup(db, "suggestions"),
+      where("status", "!=", "suggestion")
+    )
   );
 
   return { suggestions, loading, error };

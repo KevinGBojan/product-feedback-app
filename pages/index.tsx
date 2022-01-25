@@ -43,8 +43,6 @@ const Home = () => {
 
   const { suggestions } = useGetSuggestions(categoryFilter, orderFilter);
 
-  console.log(categoryFilter, orderFilter);
-
   const SignOutModal = () => {
     SignOut();
     setSignOut(false);
