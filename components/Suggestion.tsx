@@ -135,7 +135,13 @@ const Suggestion = (props: suggestionType) => {
               <span className="text-pallet-700 font-light text-sm">
                 {props.description}
               </span>
-              <div className="bg-pallet-400 flex items-center justify-center w-[100px] rounded-lg py-1 mt-3 capitalize px-2 text-pallet-300">
+              <div
+                className={`bg-pallet-400 flex items-center justify-center w-[125px] rounded-lg py-1 mt-3 ${
+                  props.category == "ux" || props.category == "ui"
+                    ? "uppercase"
+                    : "capitalize"
+                } px-2 text-pallet-300`}
+              >
                 {props.category}
               </div>
             </div>
