@@ -56,10 +56,10 @@ export default function Page({}) {
                 variants={containerVariants}
                 initial="hidden"
                 animate="show"
+                key={suggestion.slug}
               >
                 <SuggestionCard
                   commentCount={suggestion.commentCount}
-                  key={suggestion.slug}
                   title={suggestion.title}
                   description={suggestion.description}
                   status={suggestion.status}
@@ -83,10 +83,10 @@ export default function Page({}) {
                 variants={containerVariants}
                 initial="hidden"
                 animate="show"
+                key={suggestion.slug}
               >
                 <SuggestionCard
                   commentCount={suggestion.commentCount}
-                  key={suggestion.slug}
                   title={suggestion.title}
                   description={suggestion.description}
                   status={suggestion.status}
@@ -110,10 +110,10 @@ export default function Page({}) {
                 variants={containerVariants}
                 initial="hidden"
                 animate="show"
+                key={suggestion.slug}
               >
                 <SuggestionCard
                   commentCount={suggestion.commentCount}
-                  key={suggestion.slug}
                   title={suggestion.title}
                   description={suggestion.description}
                   status={suggestion.status}
