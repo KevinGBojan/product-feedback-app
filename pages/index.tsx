@@ -16,6 +16,7 @@ import { motion } from "framer-motion";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { AiOutlineCheck } from "react-icons/ai";
 import { FaSignOutAlt } from "react-icons/fa";
+import toast from "react-hot-toast";
 
 const Home = () => {
   // TODO: Animations for exit
@@ -212,7 +213,13 @@ const Home = () => {
           <button
             className="bg-pallet-100 font-bold text-sm text-pallet-400 px-6 py-3 rounded-lg"
             onClick={() =>
-              user ? router.push("/feedback") : router.push("/enter")
+              user
+                ? router.push("/feedback")
+                : router
+                    .push("/enter")
+                    .then(() =>
+                      toast.error("Please login to create suggestions!")
+                    )
             }
           >
             + Add Feedback
@@ -257,7 +264,13 @@ const Home = () => {
               <button
                 className="bg-pallet-100 font-bold text-sm text-pallet-400 px-6 py-3 rounded-lg"
                 onClick={() =>
-                  user ? router.push("/feedback") : router.push("/enter")
+                  user
+                    ? router.push("/feedback")
+                    : router
+                        .push("/enter")
+                        .then(() =>
+                          toast.error("Please login to create suggestions!")
+                        )
                 }
               >
                 + Add Feedback

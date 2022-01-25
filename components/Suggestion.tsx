@@ -13,7 +13,6 @@ import {
   increment,
   Timestamp,
 } from "firebase/firestore";
-import { useGetComments } from "../lib/Hooks/useGetComments";
 
 // Auth
 import { UserContext } from "../lib/context";
@@ -27,6 +26,9 @@ import toast from "react-hot-toast";
 
 // Animation
 import { motion } from "framer-motion";
+
+// Routing
+import { useRouter } from "next/router";
 
 // This component renders out the suggestion card that shows up on the homepage
 // and in the comments section. It takes a uid of the user that made the suggestion
@@ -46,6 +48,7 @@ interface suggestionType {
 }
 
 const Suggestion = (props: suggestionType) => {
+  const router = useRouter();
   const { user } = useContext(UserContext); // fetch user who is logged in
   const { userInfo } = useGetUserInfo(props.uid); // fetch user who made the suggestion
 
@@ -66,7 +69,13 @@ const Suggestion = (props: suggestionType) => {
       `${user?.uid}`
     );
     const docSnap = await getDoc(upvoteRef);
-    if (docSnap.exists()) {
+
+    if (!user) {
+      {
+        toast.error("Please login to upvote suggestions!");
+      }
+      router.push("/enter");
+    } else if (docSnap.exists()) {
       toast.error("You can only upvote a request once!");
     } else {
       await updateDoc(

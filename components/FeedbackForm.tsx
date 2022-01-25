@@ -16,6 +16,8 @@ import toast from "react-hot-toast";
 // Formik
 import { Formik, Form, FormikValues, FastField, ErrorMessage } from "formik";
 
+import { motion } from "framer-motion";
+
 import * as Yup from "yup";
 
 const validationSchema = Yup.object({
@@ -109,7 +111,11 @@ const FeedbackForm = (props: FeedbackType) => {
   ];
 
   return (
-    <main className="w-1/3 mx-auto pt-20 pb-40 flex flex-col justify-center items-left">
+    <motion.div
+      className="w-1/3 mx-auto pt-20 pb-40 flex flex-col justify-center items-left"
+      initial={{ opacity: 0, y: 100 }}
+      animate={{ opacity: 1, y: 0 }}
+    >
       <div
         className="text-pallet-700 font-bold flex cursor-pointer"
         onClick={() => router.back()}
@@ -251,7 +257,7 @@ const FeedbackForm = (props: FeedbackType) => {
           </Form>
         )}
       </Formik>
-    </main>
+    </motion.div>
   );
 };
 

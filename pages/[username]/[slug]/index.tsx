@@ -35,10 +35,10 @@ import { v4 as uuidv4 } from "uuid";
 
 export default function CommentsSection({}) {
   const { user, username } = useContext(UserContext); // get current user data
-  const { query } = useRouter(); // fetch username and suggestion slug from URL
-  const { userId } = useGetUserWithUsername(query.username); // get user UID with username
-  const { suggestion } = useGetUserSuggestion(userId?.uid, query.slug); // fetch suggestion
-  const { comments } = useGetComments(userId?.uid, query.slug); // query comments suggestion
+  const router = useRouter(); // fetch username and suggestion slug from URL
+  const { userId } = useGetUserWithUsername(router.query.username); // get user UID with username
+  const { suggestion } = useGetUserSuggestion(userId?.uid, router.query.slug); // fetch suggestion
+  const { comments } = useGetComments(userId?.uid, router.query.slug); // query comments suggestion
 
   const [formValue, setFormValue] = useState("");
 
@@ -52,7 +52,7 @@ export default function CommentsSection({}) {
         "users",
         `${userId?.uid}`,
         "suggestions",
-        `${query.slug}`,
+        `${router.query.slug}`,
         "comments",
         `${randomId}`
       ),
@@ -66,10 +66,10 @@ export default function CommentsSection({}) {
       .then(() => setFormValue(""))
       .then(() => toast.success("Comment added successfully"));
 
-    console.log(`${userId?.uid}`, `${query.slug}`);
+    console.log(`${userId?.uid}`, `${router.query.slug}`);
 
     await updateDoc(
-      doc(db, "users", `${userId?.uid}`, "suggestions", `${query.slug}`),
+      doc(db, "users", `${userId?.uid}`, "suggestions", `${router.query.slug}`),
       {
         commentCount: increment(1),
       }
@@ -79,14 +79,15 @@ export default function CommentsSection({}) {
   return (
     <main className="mt-10 w-1/2 mx-auto flex flex-col justify-center items-left">
       <div className="flex justify-between">
-        <Link href="/">
-          <div className="text-pallet-700 font-bold flex cursor-pointer">
-            <IoIosArrowBack size="24" className="text-pallet-200 mr-2" />
-            <span>Go Back</span>
-          </div>
-        </Link>
-        {username == query.username && (
-          <Link href={`/${query.username}/${query.slug}/edit`}>
+        <div
+          className="text-pallet-700 font-bold flex cursor-pointer"
+          onClick={() => router.back()}
+        >
+          <IoIosArrowBack size="24" className="text-pallet-200 mr-2" />
+          <span>Go Back</span>
+        </div>
+        {username == router.query.username && (
+          <Link href={`/${router.query.username}/${router.query.slug}/edit`}>
             <div className="cursor-pointer bg-pallet-200 text-pallet-500 font-bold text-sm px-5 py-3 rounded-lg">
               Edit Feedback
             </div>
@@ -128,7 +129,20 @@ export default function CommentsSection({}) {
               </div>
             </>
           ) : (
-            <></>
+            <>
+              <div className="flex justify-between mt-6 mb-2">
+                <span className="font-light text-pallet-700">
+                  Login to comment
+                </span>
+                <button
+                  type="button"
+                  onClick={() => router.push("/enter")}
+                  className="text-pallet-500 bg-pallet-100 text-xs font-bold px-8 py-4 rounded-lg"
+                >
+                  Login
+                </button>
+              </div>
+            </>
           )}
         </form>
       </div>
@@ -138,7 +152,7 @@ export default function CommentsSection({}) {
         </span>
         {comments?.reverse().map((comment) => (
           <Comments
-            slug={query.slug}
+            slug={router.query.slug}
             key={comment.commentUid}
             commentUid={comment.commentUid}
             comment={comment.comment}

@@ -119,7 +119,7 @@ const Comments = (props: commentsType) => {
         </form>
       )}
       <div className="border-l-2 pl-6 mt-6">
-        {replies?.reverse().map((res) => (
+        {replies?.map((res) => (
           <Comment
             key={res.comment}
             createdAt={res.createdAt}
