@@ -1,6 +1,5 @@
 import Link from "next/link";
 import React from "react";
-import Tag from "./Tag";
 
 interface SuggestionCardProps {
   title: string;
@@ -20,7 +19,6 @@ const SuggestionCard = (props: SuggestionCardProps) => {
         <span className="text-pallet-700 font-light text-md">
           {props.description}
         </span>
-        <Tag item={props.category} />
       </div>
     </Link>
   );
