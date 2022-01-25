@@ -233,7 +233,7 @@ const Home = () => {
               initial="hidden"
               animate="show"
             >
-              {suggestions.reverse().map((suggestion) => (
+              {suggestions.map((suggestion) => (
                 <Suggestion
                   key={suggestion.slug}
                   slug={suggestion.slug}
