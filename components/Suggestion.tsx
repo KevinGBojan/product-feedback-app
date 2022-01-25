@@ -42,12 +42,12 @@ interface suggestionType {
   description: string;
   upvotes: number;
   category: string;
+  commentCount: number;
 }
 
 const Suggestion = (props: suggestionType) => {
   const { user } = useContext(UserContext); // fetch user who is logged in
   const { userInfo } = useGetUserInfo(props.uid); // fetch user who made the suggestion
-  const { comments } = useGetComments(props.uid, props.slug); // query comments of the suggestion to show comment count
 
   let date = props.createdAt?.toDate();
 
@@ -142,7 +142,7 @@ const Suggestion = (props: suggestionType) => {
             <div className="flex">
               <FaComment size="24" className="text-[#CDD2EE] mr-3" />
               <span className="text-pallet-600 font-bold">
-                {comments?.length}
+                {props.commentCount}
               </span>
             </div>
           </div>

@@ -6,6 +6,7 @@ import { useContext } from "react";
 import { UserContext } from "../lib/context";
 import { useGetUserInfo } from "../lib/Hooks/useGetUserInfo";
 import { SignOut } from "./enter";
+import { useRouter } from "next/router";
 
 import Suggestion from "../components/Suggestion";
 import Link from "next/link";
@@ -21,6 +22,7 @@ const Home = () => {
   // TODO: Loading Spinner
   // TODO: Filtering
 
+  const router = useRouter();
   const { userInfo } = useGetUserInfo();
   const { user, username } = useContext(UserContext);
   const [signOut, setSignOut] = useState(false);
@@ -41,9 +43,7 @@ const Home = () => {
 
   const { suggestions } = useGetSuggestions(categoryFilter, orderFilter);
 
-  // useEffect(() => {
-  //   console.log(suggestions);
-  // }, [suggestions]);
+  console.log(categoryFilter, orderFilter);
 
   const SignOutModal = () => {
     SignOut();
@@ -54,7 +54,7 @@ const Home = () => {
     hidden: {},
     show: {
       transition: {
-        staggerChildren: 0.5,
+        staggerChildren: 0.3,
       },
     },
   };
@@ -201,11 +201,14 @@ const Home = () => {
               </div>
             )}
           </div>
-          <Link href="/feedback">
-            <button className="bg-pallet-100 font-bold text-sm text-pallet-400 px-6 py-3 rounded-lg">
-              + Add Feedback
-            </button>
-          </Link>
+          <button
+            className="bg-pallet-100 font-bold text-sm text-pallet-400 px-6 py-3 rounded-lg"
+            onClick={() =>
+              user ? router.push("/feedback") : router.push("/enter")
+            }
+          >
+            + Add Feedback
+          </button>
         </div>
         <div>
           {suggestions && suggestions.length > 0 ? (
@@ -220,6 +223,7 @@ const Home = () => {
                   key={suggestion.slug}
                   slug={suggestion.slug}
                   uid={suggestion.uid}
+                  commentCount={suggestion.commentCount}
                   category={suggestion.category}
                   title={suggestion.title}
                   description={suggestion.description}
@@ -229,7 +233,28 @@ const Home = () => {
               ))}
             </motion.div>
           ) : (
-            <NoFeedbackYet />
+            <div className="bg-white flex flex-col items-center justify-center py-40 mt-10 rounded-lg">
+              <Image
+                src="/../public/assets/suggestions/illustration-empty.svg"
+                height="136.74"
+                width="129.64"
+              />
+              <h3 className="text-pallet-600 mt-10">
+                There is no feedback yet.
+              </h3>
+              <p className="text-pallet-700 my-10 text-lg w-1/2 text-center">
+                Got a suggestion? Found a bug that needs to be squashed? We love
+                hearing about new ideas to improve our app.
+              </p>
+              <button
+                className="bg-pallet-100 font-bold text-sm text-pallet-400 px-6 py-3 rounded-lg"
+                onClick={() =>
+                  user ? router.push("/feedback") : router.push("/enter")
+                }
+              >
+                + Add Feedback
+              </button>
+            </div>
           )}
         </div>
       </div>
@@ -238,25 +263,3 @@ const Home = () => {
 };
 
 export default Home;
-
-function NoFeedbackYet() {
-  return (
-    <div className="bg-white flex flex-col items-center justify-center py-40 mt-10 rounded-lg">
-      <Image
-        src="/../public/assets/suggestions/illustration-empty.svg"
-        height="136.74"
-        width="129.64"
-      />
-      <h3 className="text-pallet-600 mt-10">There is no feedback yet.</h3>
-      <p className="text-pallet-700 my-10 text-lg w-1/2 text-center">
-        Got a suggestion? Found a bug that needs to be squashed? We love hearing
-        about new ideas to improve our app.
-      </p>
-      <Link href="/feedback">
-        <button className="bg-pallet-100 font-bold text-sm text-pallet-400 px-6 py-3 rounded-lg">
-          + Add Feedback
-        </button>
-      </Link>
-    </div>
-  );
-}

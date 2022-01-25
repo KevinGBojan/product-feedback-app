@@ -16,6 +16,7 @@ import {
   updateDoc,
   doc,
   increment,
+  setDoc,
 } from "firebase/firestore";
 
 // Auth
@@ -41,18 +42,19 @@ export default function CommentsSection({}) {
 
   const [formValue, setFormValue] = useState("");
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const randomId = uuidv4();
 
-    addDoc(
-      collection(
+    await setDoc(
+      doc(
         db,
         "users",
         `${userId?.uid}`,
         "suggestions",
         `${query.slug}`,
-        "comments"
+        "comments",
+        `${randomId}`
       ),
       {
         commentUid: randomId,
@@ -64,8 +66,10 @@ export default function CommentsSection({}) {
       .then(() => setFormValue(""))
       .then(() => toast.success("Comment added successfully"));
 
-    updateDoc(
-      doc(db, "user", `${userId?.uid}`, "suggestions", `${query.slug}`),
+    console.log(`${userId?.uid}`, `${query.slug}`);
+
+    await updateDoc(
+      doc(db, "users", `${userId?.uid}`, "suggestions", `${query.slug}`),
       {
         commentCount: increment(1),
       }
@@ -91,6 +95,7 @@ export default function CommentsSection({}) {
       <Suggestion
         slug={suggestion?.slug}
         uid={suggestion?.uid}
+        commentCount={suggestion?.commentCount}
         category={suggestion?.category}
         title={suggestion?.title}
         description={suggestion?.description}
