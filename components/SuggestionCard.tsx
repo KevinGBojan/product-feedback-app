@@ -80,7 +80,6 @@ const SuggestionCard = (props: SuggestionCardProps) => {
   };
 
   return (
-    // <Link href={`/${userInfo?.username}/${props.slug}`}>
     <motion.div
       drag
       dragSnapToOrigin={true}
@@ -148,7 +147,6 @@ const SuggestionCard = (props: SuggestionCardProps) => {
         </div>
       </div>
     </motion.div>
-    // </Link>
   );
 };
 
