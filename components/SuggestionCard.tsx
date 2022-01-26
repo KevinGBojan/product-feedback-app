@@ -100,7 +100,7 @@ const SuggestionCard = (props: SuggestionCardProps) => {
           });
         }
       }}
-      onClick={() => router.push(`/${userInfo?.username}/${props.slug}`)}
+      // onClick={() => router.push(`/${userInfo?.username}/${props.slug}`)}
       className="bg-white mt-8 px-5 py-8 rounded-lg relative flex flex-col cursor-pointer"
       variants={childrenVariants}
     >

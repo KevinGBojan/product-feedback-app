@@ -19,6 +19,7 @@ import { UserContext } from "../lib/context";
 
 // Notifications
 import toast from "react-hot-toast";
+import { useRouter } from "next/router";
 
 // This component renders out an individual comment and all associated replies
 // It takes the uid of the user who made it, the suggestion slug, & uid of the
@@ -34,7 +35,8 @@ interface commentsType {
 }
 
 const Comments = (props: commentsType) => {
-  const { user } = useContext(UserContext); // fetch user so we can add uid to any comment he or she makes
+  const router = useRouter();
+  const { user, username } = useContext(UserContext); // fetch user so we can add uid to any comment he or she makes
   const [openForm, setOpenForm] = useState(false); // response modal
   const [formValue, setFormValue] = useState("");
   const { replies } = useGetReplies(props.uid, props.slug, props.commentUid); // fetch replies
@@ -95,27 +97,47 @@ const Comments = (props: commentsType) => {
             value={formValue}
             onChange={(e) => setFormValue(e.target.value)}
           />
-          <div className="flex justify-between mt-6 mb-2">
-            <span className="font-light text-pallet-700">
-              {250 - formValue.length} Characters Left
-            </span>
-            <div>
-              <button
-                type="button"
-                onClick={() => setOpenForm(!openForm)}
-                className="text-pallet-500 text-xs font-bold bg-pallet-600 px-6 py-4 rounded-lg mr-4"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                disabled={formValue.length < 4 || formValue.length > 250}
-                className="text-pallet-500 bg-pallet-100 text-xs font-bold px-8 py-4 rounded-lg"
-              >
-                Post Reply
-              </button>
-            </div>
-          </div>
+          {username ? (
+            <>
+              <div className="flex justify-between mt-6 mb-2">
+                <span className="font-light text-pallet-700">
+                  {250 - formValue.length} Characters Left
+                </span>
+                <div>
+                  <button
+                    type="button"
+                    onClick={() => setOpenForm(!openForm)}
+                    className="text-pallet-500 text-xs font-bold bg-pallet-600 px-6 py-4 rounded-lg mr-4"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={formValue.length < 4 || formValue.length > 250}
+                    className="text-pallet-500 bg-pallet-100 text-xs font-bold px-8 py-4 rounded-lg"
+                  >
+                    Post Reply
+                  </button>
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="flex justify-between mt-6 mb-2">
+                <span className="font-light text-pallet-700">
+                  Login to comment
+                </span>
+
+                <button
+                  type="button"
+                  onClick={() => router.push("/enter")}
+                  className="text-pallet-500 bg-pallet-100 text-xs font-bold px-8 py-4 rounded-lg"
+                >
+                  Login
+                </button>
+              </div>
+            </>
+          )}
         </form>
       )}
       <div className="border-l-2 pl-6 mt-6">

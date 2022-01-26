@@ -1,20 +1,33 @@
 import { useEffect, useState } from "react";
 import { db } from "../firebase";
 import {
-  getDocs,
   collectionGroup,
   query,
   orderBy,
-  limit,
-  getDoc,
+  onSnapshot,
+  Timestamp,
 } from "firebase/firestore";
 import { useCollectionData } from "react-firebase-hooks/firestore";
+
+// interface suggestionType {
+//   title: string;
+//   description: string;
+//   category: string;
+//   commentCount: number;
+//   upvotes: number;
+//   createdAt: Timestamp;
+//   updatedAt: Timestamp;
+//   slug: string;
+//   status: string;
+//   uid: string;
+// }
 
 export const useGetSuggestions = (
   categoryFilter: string,
   orderFilter: string
 ) => {
   // const [order, setOrder] = useState(orderBy("upvotes", "desc"));
+  // const [suggestions, setSuggestions] = useState<suggestionType[]>([]);
 
   // useEffect(() => {
   //   switch (orderFilter) {
@@ -27,6 +40,22 @@ export const useGetSuggestions = (
   //     case "Least Comments":
   //       setOrder(orderBy("commentCount", "asc"));
   //   }
+
+  //   let unsubscribe;
+
+  //   unsubscribe = onSnapshot(
+  //     query(collectionGroup(db, "suggestions"), order),
+  //     (querySnapshot) => {
+  //       let temp: suggestionType[] = [];
+  //       querySnapshot.forEach((doc) => {
+  //         temp.push(doc.data() as suggestionType);
+  //       });
+  //       setSuggestions(temp);
+  //     }
+  //   );
+
+  //   // turn off realtime subscription
+  //   return unsubscribe;
   // }, [orderFilter]);
 
   const q = query(
