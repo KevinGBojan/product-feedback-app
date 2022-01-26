@@ -74,7 +74,6 @@ const Suggestion = (props: suggestionType) => {
       {
         toast.error("Please login to upvote suggestions!");
       }
-      router.push("/enter");
     } else if (docSnap.exists()) {
       toast.error("You can only upvote a request once!");
     } else {
@@ -103,18 +102,18 @@ const Suggestion = (props: suggestionType) => {
 
   return (
     <motion.div
-      className="bg-white px-8 py-8 flex mt-8 rounded-lg"
+      className="mt-8 flex rounded-lg bg-white px-8 py-8"
       variants={childrenVariants}
     >
       <div
-        className="bg-pallet-400 h-[50px] flex flex-col items-center px-2 rounded-xl mr-8 cursor-pointer"
+        className="bg-pallet-400 mr-8 flex h-[50px] cursor-pointer flex-col items-center rounded-xl px-2"
         onClick={handleUpvote}
       >
         <IoIosArrowUp size="24" className="text-pallet-200" />
-        <span className="font-bold text-pallet-600">{props.upvotes}</span>
+        <span className="text-pallet-600 font-bold">{props.upvotes}</span>
       </div>
       <Link href={`/${userInfo?.username}/${props.slug}`}>
-        <div className="w-full flex flex-col cursor-pointer">
+        <div className="flex w-full cursor-pointer flex-col">
           {userInfo && (
             <div className="flex">
               <Image
@@ -123,11 +122,11 @@ const Suggestion = (props: suggestionType) => {
                 width="35"
                 className="rounded-full"
               />
-              <div className="flex flex-col ml-4">
-                <span className="text-pallet-600 font-bold text-sm">
+              <div className="ml-4 flex flex-col">
+                <span className="text-pallet-600 text-sm font-bold">
                   {userInfo.displayName}
                 </span>
-                <span className="text-[#647196] font-light text-xs">
+                <span className="text-xs font-light text-[#647196]">
                   {new Intl.DateTimeFormat("en-GB", {
                     month: "short",
                     day: "2-digit",
@@ -138,26 +137,26 @@ const Suggestion = (props: suggestionType) => {
               </div>
             </div>
           )}
-          <div className="flex justify-between mt-4">
+          <div className="mt-4 flex justify-between">
             <div className="flex flex-col">
               <span className="text-pallet-600 font-bold">{props.title}</span>
-              <span className="text-pallet-700 font-light text-sm">
+              <span className="text-pallet-700 text-sm font-light">
                 {props.description}
               </span>
-              <div className="flex justify-start items-center">
+              <div className="flex items-center justify-start">
                 <div
-                  className={`bg-pallet-400 rounded-lg px-5 py-1.5 mt-3 ${
+                  className={`bg-pallet-400 mt-3 rounded-lg px-5 py-1.5 ${
                     props.category == "ux" || props.category == "ui"
                       ? "uppercase"
                       : "capitalize"
-                  } px-2 text-pallet-300`}
+                  } text-pallet-300 px-2`}
                 >
                   {props.category}
                 </div>
               </div>
             </div>
             <div className="flex">
-              <FaComment size="24" className="text-[#CDD2EE] mr-3" />
+              <FaComment size="24" className="mr-3 text-[#CDD2EE]" />
               <span className="text-pallet-600 font-bold">
                 {props.commentCount}
               </span>

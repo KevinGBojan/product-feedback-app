@@ -25,7 +25,7 @@ const Enter = () => {
   // If user is signed in and has chosen a username, show the Sign Out Button
 
   return (
-    <main className="w-screen h-screen flex flex-col justify-center items-center">
+    <main className="flex h-screen w-screen flex-col items-center justify-center">
       {user ? (
         !username ? (
           <UsernameForm />
@@ -53,7 +53,7 @@ function SignInButton() {
       <div className="flex flex-col items-center justify-center">
         <button
           onClick={SignInWithGoogle}
-          className="mt-40 flex p-4 text-white bg-pallet-100 rounded-md font-semibold"
+          className="bg-pallet-100 mt-40 flex rounded-md p-4 font-semibold text-white"
         >
           <FaGoogle size="24" className="mr-4" />
           <span>Sign In With Google</span>
@@ -74,7 +74,7 @@ function SignOutButton() {
     <section>
       <button
         onClick={SignOut}
-        className="flex mt-40 p-4 text-white bg-pallet-100 rounded-md"
+        className="bg-pallet-100 mt-40 flex rounded-md p-4 text-white"
       >
         <span>Sign Out</span>
       </button>
@@ -158,23 +158,23 @@ function UsernameForm() {
       <Image src={avatar} height="120" width="120" />
       <form
         onSubmit={(e) => handleSubmit(e)}
-        className="mt-10 flex flex-col justify-center items-center"
+        className="mt-10 flex flex-col items-center justify-center"
       >
-        <label htmlFor="username" className="text-lg mb-2">
+        <label htmlFor="username" className="mb-2 text-lg">
           Choose Your Username
         </label>
         <input
           value={formValue}
           onChange={onChange}
-          className="text-gray-900 text-md px-3 py-2 rounded-md outline-none"
+          className="text-md rounded-md px-3 py-2 text-gray-900 outline-none"
         />
         <ErrorMessage username={formValue} valid={valid} loading={loading} />
         <button
           type="submit"
           disabled={!valid}
-          className="px-4 py-2 bg-pallet-100 font-bold text-white tracking-wider rounded-lg mt-4"
+          className="bg-pallet-100 mt-4 rounded-lg px-4 py-2 font-bold tracking-wider text-white"
         >
-          Plz
+          Login
         </button>
       </form>
     </section>

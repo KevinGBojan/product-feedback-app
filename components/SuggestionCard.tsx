@@ -63,7 +63,6 @@ const SuggestionCard = (props: SuggestionCardProps) => {
       {
         toast.error("Please login to upvote suggestions!");
       }
-      router.push("/enter");
     } else if (docSnap.exists()) {
       toast.error("You can only upvote a request once!");
     } else {
@@ -85,7 +84,11 @@ const SuggestionCard = (props: SuggestionCardProps) => {
       dragSnapToOrigin={true}
       dragElastic={0.8}
       onDragEnd={(e, info) => {
-        if (info.point.x > 0 && info.point.x < width * 0.39) {
+        if (!user) {
+          {
+            toast.error("Please login to change the status of a suggestion!");
+          }
+        } else if (info.point.x > 0 && info.point.x < width * 0.39) {
           updateDoc(suggestionRef, {
             status: "planned",
           });
@@ -100,11 +103,11 @@ const SuggestionCard = (props: SuggestionCardProps) => {
         }
       }}
       // onClick={() => router.push(`/${userInfo?.username}/${props.slug}`)}
-      className="bg-white mt-8 px-5 py-8 rounded-lg relative flex flex-col cursor-pointer"
+      className="relative mt-8 flex cursor-pointer flex-col rounded-lg bg-white px-5 py-8"
       variants={childrenVariants}
     >
       <div
-        className={`absolute top-0 left-0 w-full h-3 rounded-t-lg ${
+        className={`absolute top-0 left-0 h-3 w-full rounded-t-lg ${
           props.status == "planned"
             ? "bg-[#E8A28A]"
             : props.status == "live"
@@ -114,33 +117,33 @@ const SuggestionCard = (props: SuggestionCardProps) => {
       ></div>
       <div className="absolute top-1.5 left-0 h-2 w-full rounded-t-full bg-white"></div>
 
-      <span className="text-xl text-pallet-600 font-bold mb-2">
+      <span className="text-pallet-600 mb-2 text-xl font-bold">
         {props.title}
       </span>
-      <span className="text-pallet-700 font-light text-md leading-6 text-justify">
+      <span className="text-pallet-700 text-md text-justify font-light leading-6">
         {props.description}
       </span>
-      <div className="flex justify-start items-center">
+      <div className="flex items-center justify-start">
         <div
-          className={`bg-pallet-400 rounded-lg px-5 py-1.5 mt-5 ${
+          className={`bg-pallet-400 mt-5 rounded-lg px-5 py-1.5 ${
             props.category == "ux" || props.category == "ui"
               ? "uppercase"
               : "capitalize"
-          } px-2 text-pallet-300`}
+          } text-pallet-300 px-2`}
         >
           {props.category}
         </div>
       </div>
-      <div className="flex justify-between items-center mt-5">
+      <div className="mt-5 flex items-center justify-between">
         <div
-          className="bg-pallet-500 flex items-center justify-center px-4 py-2 rounded-xl"
+          className="bg-pallet-500 flex items-center justify-center rounded-xl px-4 py-2"
           onClick={handleUpvote}
         >
           <IoIosArrowUp size="16" className="text-pallet-200 mr-2" />
           {props.upvotes}
         </div>
         <div className="flex">
-          <FaComment size="24" className="text-[#CDD2EE] mr-3" />
+          <FaComment size="24" className="mr-3 text-[#CDD2EE]" />
           <span className="text-pallet-600 font-bold">
             {props.commentCount}
           </span>
