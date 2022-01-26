@@ -32,7 +32,7 @@ export const useGetSuggestions = (
         );
         break;
     }
-  }, [orderFilter]);
+  }, [orderFilter, suggestionsObj]);
 
   useEffect(() => {
     if (categoryFilter === "All") {

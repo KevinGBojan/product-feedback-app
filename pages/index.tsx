@@ -68,6 +68,8 @@ const Home = () => {
     },
   };
 
+  useEffect(() => console.log("fuck"), [suggestions]);
+
   return (
     <div className="mx-auto flex w-3/4 pt-20">
       <div className="mr-12 w-1/4">
@@ -194,7 +196,6 @@ const Home = () => {
                     onClick={() => {
                       // add or remove category from orderFilter, depending on whether it's in it already
                       setOrderFilter(filter);
-                      setDropdown(false);
                     }}
                     key={filter}
                   >
