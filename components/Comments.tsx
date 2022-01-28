@@ -32,6 +32,7 @@ interface commentsType {
   createdAt: any;
   comment: string;
   commentUid: string;
+  userPostUid: string;
 }
 
 const Comments = (props: commentsType) => {
@@ -48,7 +49,7 @@ const Comments = (props: commentsType) => {
       collection(
         db,
         "users",
-        `${props.uid}`,
+        `${props.userPostUid}`,
         "suggestions",
         `${props.slug}`,
         "comments",
@@ -66,7 +67,7 @@ const Comments = (props: commentsType) => {
       .then(() => toast.success("Comment added successfully"));
 
     await updateDoc(
-      doc(db, "users", `${props.uid}`, "suggestions", `${props.slug}`),
+      doc(db, "users", `${props.userPostUid}`, "suggestions", `${props.slug}`),
       {
         commentCount: increment(1),
       }
@@ -74,7 +75,7 @@ const Comments = (props: commentsType) => {
   };
 
   return (
-    <div className="py-8 border-b-2">
+    <div className="border-b-2 py-8">
       <Comment
         key={props.commentUid}
         createdAt={props.createdAt}
@@ -83,7 +84,7 @@ const Comments = (props: commentsType) => {
       />
       {!openForm && (
         <span
-          className="text-pallet-300 text-xs cursor-pointer"
+          className="text-pallet-300 cursor-pointer text-xs"
           onClick={() => setOpenForm(!openForm)}
         >
           Reply
@@ -93,28 +94,28 @@ const Comments = (props: commentsType) => {
       {openForm && (
         <form onSubmit={(e) => onSubmit(e)} className="mt-6">
           <textarea
-            className="w-full min-h-[100px] bg-pallet-500 outline-none rounded-md py-5 px-4 text-pallet-600 font-light"
+            className="bg-pallet-500 text-pallet-600 min-h-[100px] w-full rounded-md py-5 px-4 font-light outline-none"
             value={formValue}
             onChange={(e) => setFormValue(e.target.value)}
           />
           {username ? (
             <>
-              <div className="flex justify-between mt-6 mb-2">
-                <span className="font-light text-pallet-700">
+              <div className="mt-6 mb-2 flex justify-between">
+                <span className="text-pallet-700 font-light">
                   {250 - formValue.length} Characters Left
                 </span>
                 <div>
                   <button
                     type="button"
                     onClick={() => setOpenForm(!openForm)}
-                    className="text-pallet-500 text-xs font-bold bg-pallet-600 px-6 py-4 rounded-lg mr-4"
+                    className="text-pallet-500 bg-pallet-600 mr-4 rounded-lg px-6 py-4 text-xs font-bold"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={formValue.length < 4 || formValue.length > 250}
-                    className="text-pallet-500 bg-pallet-100 text-xs font-bold px-8 py-4 rounded-lg"
+                    className="text-pallet-500 bg-pallet-100 rounded-lg px-8 py-4 text-xs font-bold"
                   >
                     Post Reply
                   </button>
@@ -123,15 +124,15 @@ const Comments = (props: commentsType) => {
             </>
           ) : (
             <>
-              <div className="flex justify-between mt-6 mb-2">
-                <span className="font-light text-pallet-700">
+              <div className="mt-6 mb-2 flex justify-between">
+                <span className="text-pallet-700 font-light">
                   Login to comment
                 </span>
 
                 <button
                   type="button"
                   onClick={() => router.push("/enter")}
-                  className="text-pallet-500 bg-pallet-100 text-xs font-bold px-8 py-4 rounded-lg"
+                  className="text-pallet-500 bg-pallet-100 rounded-lg px-8 py-4 text-xs font-bold"
                 >
                   Login
                 </button>
@@ -140,7 +141,7 @@ const Comments = (props: commentsType) => {
           )}
         </form>
       )}
-      <div className="border-l-2 pl-6 mt-6">
+      <div className="mt-6 border-l-2 pl-6">
         {replies?.map((res) => (
           <Comment
             key={res.comment}

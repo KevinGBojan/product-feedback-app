@@ -83,6 +83,8 @@ const SuggestionCard = (props: SuggestionCardProps) => {
       drag
       dragSnapToOrigin={true}
       dragElastic={0.8}
+      // onTap={() => router.push(`/${userInfo?.username}/${props.slug}`)}
+      onTap={(e, info) => console.log(info.point.x)}
       onDragEnd={(e, info) => {
         if (!user) {
           {
@@ -102,7 +104,6 @@ const SuggestionCard = (props: SuggestionCardProps) => {
           });
         }
       }}
-      // onClick={() => router.push(`/${userInfo?.username}/${props.slug}`)}
       className="relative mt-8 flex cursor-pointer flex-col rounded-lg bg-white px-5 py-8"
       variants={childrenVariants}
     >

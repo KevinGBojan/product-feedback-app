@@ -62,7 +62,7 @@ const Suggestion = (props: suggestionType) => {
     const upvoteRef = doc(
       db,
       "users",
-      `${user?.uid}`,
+      `${props.uid}`,
       "suggestions",
       `${props.slug}`,
       "upvotes",
@@ -98,13 +98,16 @@ const Suggestion = (props: suggestionType) => {
       opacity: 1,
       y: 0,
     },
+    exit: {
+      opacity: 0,
+      y: 0,
+    },
   };
 
   return (
     <motion.div
       className="mt-8 flex rounded-lg bg-white px-8 py-8"
       variants={childrenVariants}
-      exit={{ opacity: 0 }}
     >
       <div
         className="bg-pallet-400 mr-8 flex h-[50px] cursor-pointer flex-col items-center rounded-xl px-2"

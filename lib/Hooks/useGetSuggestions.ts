@@ -7,7 +7,7 @@ export const useGetSuggestions = (
   categoryFilter: string,
   orderFilter: string
 ) => {
-  const [suggestionsObj] = useCollectionData(
+  const [suggestionsObj, loading, error] = useCollectionData(
     collectionGroup(db, "suggestions")
   );
 
@@ -46,5 +46,5 @@ export const useGetSuggestions = (
     }
   }, [categoryFilter, suggestionsObj]);
 
-  return { suggestions };
+  return { suggestions, loading, error };
 };

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { useGetSuggestions } from "../lib/Hooks/useGetSuggestions";
 import { RiLightbulbFlashFill } from "react-icons/ri";
@@ -19,13 +19,9 @@ import { FaSignOutAlt } from "react-icons/fa";
 import toast from "react-hot-toast";
 
 const Home = () => {
-  // TODO: Animations for exit
-  // TODO: Loading Spinner
-  // TODO: Filtering
-
   const router = useRouter();
-  const { userInfo } = useGetUserInfo();
   const { user, username } = useContext(UserContext);
+  const { userInfo } = useGetUserInfo();
   const [signOut, setSignOut] = useState(false);
 
   // Filtering with categories
@@ -47,9 +43,11 @@ const Home = () => {
   const plannedCount = suggestions?.filter(
     (suggestion) => suggestion.status == "planned"
   ).length;
+
   const liveCount = suggestions?.filter(
     (suggestion) => suggestion.status == "live"
   ).length;
+
   const progressCount = suggestions?.filter(
     (suggestion) => suggestion.status == "inprogress"
   ).length;
@@ -67,8 +65,6 @@ const Home = () => {
       },
     },
   };
-
-  useEffect(() => console.log("fuck"), [suggestions]);
 
   return (
     <div className="mx-auto flex w-3/4 pt-20">
@@ -193,10 +189,10 @@ const Home = () => {
                 {filters.map((filter) => (
                   <button
                     className="text-md hover:text-pallet-100 flex w-full items-center justify-between border-gray-100 px-3 py-3  text-sm font-light capitalize text-gray-900"
-                    onClick={() => {
+                    onClick={() =>
                       // add or remove category from orderFilter, depending on whether it's in it already
-                      setOrderFilter(filter);
-                    }}
+                      setOrderFilter(filter)
+                    }
                     key={filter}
                   >
                     {filter}
@@ -233,6 +229,7 @@ const Home = () => {
               variants={containerVariants}
               initial="hidden"
               animate="show"
+              exit="exit"
             >
               {suggestions.map((suggestion) => (
                 <Suggestion
