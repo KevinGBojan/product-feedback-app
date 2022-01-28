@@ -21,7 +21,7 @@ import toast from "react-hot-toast";
 const Home = () => {
   const router = useRouter();
   const { user, username } = useContext(UserContext);
-  const { userInfo } = useGetUserInfo();
+  const { userInfo } = useGetUserInfo(user?.uid);
   const [signOut, setSignOut] = useState(false);
 
   // Filtering with categories
@@ -229,7 +229,6 @@ const Home = () => {
               variants={containerVariants}
               initial="hidden"
               animate="show"
-              exit="exit"
             >
               {suggestions.map((suggestion) => (
                 <Suggestion
