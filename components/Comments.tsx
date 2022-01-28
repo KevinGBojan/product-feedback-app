@@ -40,7 +40,11 @@ const Comments = (props: commentsType) => {
   const { user, username } = useContext(UserContext); // fetch user so we can add uid to any comment he or she makes
   const [openForm, setOpenForm] = useState(false); // response modal
   const [formValue, setFormValue] = useState("");
-  const { replies } = useGetReplies(props.uid, props.slug, props.commentUid); // fetch replies
+  const { replies } = useGetReplies(
+    props.userPostUid,
+    props.slug,
+    props.commentUid
+  ); // fetch replies
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
