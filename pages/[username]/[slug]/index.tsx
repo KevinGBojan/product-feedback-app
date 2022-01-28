@@ -66,8 +66,6 @@ export default function CommentsSection({}) {
       .then(() => setFormValue(""))
       .then(() => toast.success("Comment added successfully"));
 
-    console.log(`${userId?.uid}`, `${router.query.slug}`);
-
     await updateDoc(
       doc(db, "users", `${userId?.uid}`, "suggestions", `${router.query.slug}`),
       {
@@ -157,6 +155,7 @@ export default function CommentsSection({}) {
             commentUid={comment.commentUid}
             comment={comment.comment}
             createdAt={comment.createdAt}
+            userPostUid={userId?.uid}
             uid={comment.uid}
           />
         ))}

@@ -32,7 +32,7 @@ interface commentsType {
   createdAt: any;
   comment: string;
   commentUid: string;
-  userPostUid: string;
+  userPostUid: string | string[] | undefined;
 }
 
 const Comments = (props: commentsType) => {
